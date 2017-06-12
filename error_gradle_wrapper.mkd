@@ -1,0 +1,13 @@
+#Arreglar no se encontro Gradle Wrapper 
+
+En recientes actualizaciones del SDK de Android Goggle decidio cambiar la estructura del árbol de directorios de sus herramienta de desarrollo haciendo imposible compilar aplicaciones desarrolladas en Qt Creator para plataformas Android. La causa es que movieron de lugar el directorio ***.../lib/templates*** y Qt Creator no puede encontrar la herramienta Graddle Wrapper.
+
+La respuesta para solucionar este problema la encontre en [Stackoverflow](https://stackoverflow.com/questions/31310182/error-could-not-find-gradle-wrapper-within-android-sdk-might-need-to-update-yo) en un hilo de ***Cordoba***.
+
+Para arreglarlo lo que tenemos que hacer es copiar el directorio ***/templates*** de Android Studio al directorio ***/tools*** de nuestra instalación de SDK de Android y darle permisos de ejecución.
+
+```
+    cp -r /Directorio/Donde/Esta/Instalado/AndroidStudio/plugins/android/lib/templates /Directorio/Donde/Esta/Instalado/El/SDK/tools
+    chmod a+x /Directorio/Donde/Esta/Instalado/El/SDK/tools/templates/gradle/wrapper/gradlew
+```
+

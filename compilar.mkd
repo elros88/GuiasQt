@@ -1,0 +1,118 @@
+# Compilar Qt
+
+Guía para compilar Qt en sistemas GNU/Linux. Probado en Ubuntu 16.04 con Qt versión 5.8.
+
+##Qt Desktop
+
+*** Prerequisitos ***
+
+_(esto es necesario para la version 5.7)_
+
+- Buscar el archivo:
+
+```
+    qt-everywhere-opensource-src-5.7.0/qtwayland/src/compositor/extensions/extensions.pri
+```
+- Agregar la linea
+```
+    CONFIG += generated_privates
+```
+
+*** Instalación ***
+
+- Navegar hasta el directorio donde se encuentra Qt.
+```
+    cd /tu/directorio/qt-everywhere-opensource-src-version
+```
+- Crear una carpeta donde configurar y compilar la libreria e ingresaremos a ella. _En este caso la llamaremos ***build***_
+```
+    mkdir build
+    cd build
+```
+- Configuramos Qt con las opciones que deseemos. Para una guia de todas las puedes visitar [Opciones de Configuración de Qt](http://doc.qt.io/qt-5/configure-options.html).
+```
+    ../configure - static -prefix /opt/Qt -qt-zlib -qt-libjpeg -qt-libpng -qt-xcb -qt-xkbcommon -qt-freetype -qt-pcre -qt-harfbuzz
+```
+
+_(En este caso particular estamos utilizando la opcion ***-static*** para compilar Qt para enlazarlo estaticamente con nuestras aplicaciones y la opcion ***-prefix*** para definir el directorio donde instalaremos la libreria)_
+
+- Compilar e Instalar
+```
+    make 
+    sudo make install
+```
+
+##Qt Android
+***Prerequisitos***
+
+_Para este proceso se requiere instalar el ***SDK*** y el ***NDK*** de Android en el sistema. se pueden descargar desde el siguiente los siguientes enlaces:_
+
+- [_SDK_](https://developer.android.com/studio/index.html).
+- [_NDK_](https://developer.android.com/ndk/index.html).
+
+_Actualmente se requiere instalar Android Studio para poder descargar el SDK._
+_Para esta guia se toman los directorios ***"/opt/android_sdk"*** y ***"/opt/android_ndk"*** como los directorios de instalación del SDK y NDK de Android._
+
+
+***Instalación***
+
+Para compilar la libreria para Android (en caso de que se quiera desarrollar aplicaciones con QtQuick) se siguen los mismos pasos que para el proceso de compilación para Desktop, el unico cambio que vamos a hacer es en el paso de configuración en el cual utilizamos otras opciones
+
+- Navegar hasta el directorio donde se encuentra Qt.
+```
+    cd /tu/directorio/qt-everywhere-opensource-src-version
+```
+- Crear una carpeta donde configurar y compilar la libreria e ingresaremos a ella. _En este caso la llamaremos ***build_android***_
+```
+    mkdir build_android
+    cd build_android
+```
+
+- Configuramos Qt con las opciones que deseemos. Para mas información de las opciones de configuración para Android se puede consultar el siguiente [enlace](http://wiki.qt.io/Android). 
+
+```
+    ../configure -xplatform android-g++ -nomake tests -nomake examples -android-ndk /opt/android_ndk -android-sdk /opt/android_sdk -android-ndk-host linux-x86_64 -android-toolchain-version 4.9 -skip qttranslations -skip qtserialport -prefix /opt/Qt-android
+```
+
+- Compilar e Instalar
+
+```
+    make
+    sudo make install
+```
+
+##Qt BeagleBoard
+
+***Prerequisitos***
+
+_Para poder utilizar Qt para Beagleboard es necesario bajar un compilador y un sysroot para la arquitectura objetivo hacia la cual se quiere compilar la aplicación. para este caso utilizaremos Linaro; podemos encontrar el compilador y el sysroot para la arquitectura ***armv8*** en el siguiente [enlace](https://releases.linaro.org/components/toolchain/binaries/6.3-2017.02/armv8l-linux-gnueabihf/)_
+
+- Descargamos ***gcc-linaro-6.3.1-2017.02-x86_64_armv8l-linux-gnueabihf.tar.xz*** _(Esta versión es para compilar programas para armv8 desde una computadora de 64bits, en caso de tener una computadora de 32 bits buscamos el archivo que contenga i386 en el nombre en lugar de x86_64)_.
+- Descargados ***sysroot-glibc-linaro-2.23-2017.02-armv8l-linux-gnueabihf.tar.xz*** _(Este archivo contiene un árbol de directorios que emula el árbol de directorios del sistema de destino)_.
+- Descomprimimos en algún directorio de nuestro sistema (_yo utilize mi directorio /home/usuario/) ambos archivos.
+
+***Instalación***
+
+- Navegar hasta el directorio donde se encuentra Qt.
+```
+    cd /tu/directorio/qt-everywhere-opensource-src-version
+```
+- Crear una carpeta donde configurar y compilar la libreria e ingresaremos a ella. _En este caso la llamaremos ***build_beagle***_
+```
+    mkdir build_beagle
+    cd build_beagle
+```
+
+- Configuramos Qt con las opciones que deseemos. Para mas información de las opciones de configuración para Crosscompiling se puede consultar el siguiente [enlace](http://doc.qt.io/qt-5/embedded-linux.html#configuring-a-specific-device). 
+
+```
+    ../configure -release -opengl es2 -device linux-beagleboard-g++ -device-option CROSS_COMPILE=/el/directorio/donde/descomprimimos/linaro/gcc-linaro/bin/armv8l-linux-gnueabihf- -sysroot el/directorio/donde/descomprimimos/sysroot/sysroot -prefix /opt/Qt-beagle -no-opengl -qt-zlib -qt-libjpeg -qt-libpng -qt-xcb -qt-freetype -qt-pcre -qt-harfbuzz -nomake examples -nomake tests
+```
+
+- Compilar e Instalar
+
+```
+    make
+    sudo make install
+```
+
