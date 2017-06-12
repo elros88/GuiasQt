@@ -1,3 +1,4 @@
+https://upload.wikimedia.org/wikipedia/commons/d/d3/Qt_logo_2015.svg
 # Compilar Qt
 
 Guía para compilar Qt en sistemas GNU/Linux. Probado en Ubuntu 16.04 con Qt versión 5.8.
